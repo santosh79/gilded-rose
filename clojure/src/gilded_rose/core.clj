@@ -9,7 +9,7 @@
 
 (defmethod get-quality "Sulfuras, Hand Of Ragnaros"
   [item]
-  item)
+  (merge item {:quality 80}))
 
 (defmethod get-quality "Conjured"
   [item]
@@ -27,9 +27,18 @@
 
 (defmethod get-quality :default
   [item]
-  (merge item {:quality (dec (:quality item))}))
+  (cond (pos? (:sell-in item)) (merge item {:quality (dec (:quality item))})
+        :else (merge item {:quality (dec (dec (:quality item)))})))
 
-(defn get-sell-in [item]
+(defmulti get-sell-in (fn[item]
+                        (:name item)))
+
+(defmethod get-sell-in "Sulfuras, Hand Of Ragnaros"
+  [item]
+  (merge item {:sell-in -1}))
+
+(defmethod get-sell-in :default
+  [item]
   (merge item {:sell-in (dec (:sell-in item))}))
 
 (defn handle-negative-quality
