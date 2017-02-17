@@ -7,6 +7,10 @@
   [item]
   (merge item {:quality (inc (:quality item))}))
 
+(defmethod get-quality "Sulfuras, Hand Of Ragnaros"
+  [item]
+  item)
+
 (defmethod get-quality "Conjured"
   [item]
   (merge item {:quality (dec (dec (:quality item)))}))
@@ -23,9 +27,7 @@
 
 (defmethod get-quality :default
   [item]
-  (cond
-    (clojure.string/starts-with? (:name item) "Sulfuras") item
-    :else (merge item {:quality (dec (:quality item))})))
+  (merge item {:quality (dec (:quality item))}))
 
 (defn get-sell-in [item]
   (merge item {:sell-in (dec (:sell-in item))}))
